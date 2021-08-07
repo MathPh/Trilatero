@@ -68,7 +68,7 @@ const Canvas = props => {
 
   }
   
-  return <canvas ref={canvasRef} width="500" height="500" style={{border:"1px solid #000000"}, {background: "#FFFFFF"}}/>
+  return <canvas ref={canvasRef} width={props.size*props.tam} height={((props.size*Math.sqrt(3))/2)*props.tam} style={{border:"1px solid #000000"}, {background: "#FFFFFF"}}/>
 }
 
 
@@ -90,9 +90,11 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-      <Canvas tam={tam} offset={100} size={50} />
-      <button onClick={() => {handleTamAum()}}>+</button>
-      <button onClick={() => {handleTamDim()}}>-</button>
+        <div class = "buttons">
+          <button onClick={() => {handleTamAum()}}>+</button>
+          <button onClick={() => {handleTamDim()}}>-</button>
+        </div>
+      <Canvas tam={tam} offset={0} size={50} />
       </header>
     </div>
   );
