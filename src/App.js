@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import Jogador from './componentes/Jogador.js'
 
 const Canvas = props => {
   
@@ -95,6 +96,7 @@ function App() {
           <button onClick={() => {handleTamDim()}}>-</button>
         </div>
       <Canvas tam={tam} offset={0} size={50} />
+      <Jogador/>
       </header>
     </div>
   );
