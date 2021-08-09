@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import Jogador from './componentes/Jogador.js'
+import Jogador from './componentes/Jogador.js';
+import Carta from './componentes/Carta';
 
 const Canvas = props => {
   
@@ -97,6 +98,7 @@ function App() {
         </div>
       <Canvas tam={tam} offset={0} size={50} />
       <Jogador/>
+      <Carta/>
       </header>
     </div>
   );
