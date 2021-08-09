@@ -1,4 +1,4 @@
-import './Jogador.css';
+import './Carta.css';
 import React, { useEffect, useState } from 'react';
 
 export default function Jogador(props){
