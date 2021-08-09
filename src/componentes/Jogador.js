@@ -52,7 +52,7 @@ export default function Jogador(props){
             <button onClick={() => {handleVisualizarJogador()}}>
                 Trocar de Jogador
             </button>
-            <p>Informações sobre jogadores</p>
+            <p>Informações sobre jogador</p>
             {eu % 3 === 1 ? <p>Jogador 1: {jogador_1}</p> : null}
             {eu % 3 === 2 ? <p>Jogador 2: {jogador_2}</p> : null}
             {eu % 3 === 0 ? <p>Jogador 3: {jogador_3}</p> : null}
