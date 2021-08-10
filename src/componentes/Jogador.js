@@ -7,6 +7,7 @@ export default function Jogador(props){
     const [jogador_1,setJogador1] = useState(0)
     const [jogador_2,setJogador2] = useState(0)
     const [jogador_3,setJogador3] = useState(0)
+    const [voto, setVoto] = useState(["Não","Sim"])
     const [eu, setEu] = useState(0)
 
     useEffect(() => {
@@ -15,6 +16,10 @@ export default function Jogador(props){
         setJogador2(segundo)
         setJogador3(terceiro)
     }, [renovar])
+
+    useEffect(() => {
+        console.log(voto)
+    }, [voto])
 
     //https://stackoverflow.com/a/2450976/9295348
 
@@ -44,6 +49,10 @@ export default function Jogador(props){
           setEu(eu+1)
       }
 
+      function handleVotacao(id, veredito){
+          setVoto(prev => ({...prev, [id]: veredito}))
+      }
+
     return(
         <div class = "caixa_jogador">
             <button onClick={() => {handleRenovar()}}>
@@ -53,9 +62,48 @@ export default function Jogador(props){
                 Trocar de Jogador
             </button>
             <p>Informações sobre jogador</p>
-            {eu % 3 === 1 ? <p>Jogador 1: {jogador_1}</p> : null}
-            {eu % 3 === 2 ? <p>Jogador 2: {jogador_2}</p> : null}
-            {eu % 3 === 0 ? <p>Jogador 3: {jogador_3}</p> : null}
+            {eu % 3 === 1 ?
+             <div>
+                <p>Jogador 1: {jogador_1}</p> 
+                <button onClick={() => {handleVotacao(1,"Sim")}}>
+                    Sim
+                </button>
+                <button onClick={() => {handleVotacao(1,"Não")}}>
+                    Não
+                </button>
+             </div>
+             : null}
+            {eu % 3 === 2 ? 
+            <div>
+               <p>Jogador 2: {jogador_2}</p> 
+               <button onClick={() => {handleVotacao(2,"Sim")}}>
+                    Sim
+                </button>
+                <button onClick={() => {handleVotacao(2,"Não")}}>
+                    Não
+                </button>
+            </div>
+            : null}
+            {eu % 3 === 0 ? 
+            <div>
+            <p>Jogador 3: {jogador_3}</p> 
+            <button onClick={() => {handleVotacao(3,"Sim")}}>
+                 Sim
+             </button>
+             <button onClick={() => {handleVotacao(3,"Não")}}>
+                 Não
+             </button>
+         </div>
+            : null}
+         <div>
+            {voto.map((item, key) => (
+                <div>
+                    <ul>
+                        <li>{key}: {item}</li>
+                    </ul>
+                 </div>             
+            ))}
+         </div>
         </div>
     );
 }
