@@ -7,7 +7,7 @@ export default function Jogador(props){
     const [jogador_1,setJogador1] = useState(0)
     const [jogador_2,setJogador2] = useState(0)
     const [jogador_3,setJogador3] = useState(0)
-    const [voto, setVoto] = useState(["Não","Sim"])
+    const [voto, setVoto] = useState(["Não","Sim","Sim","Não"])
     const [eu, setEu] = useState(0)
 
     useEffect(() => {
@@ -53,6 +53,18 @@ export default function Jogador(props){
           setVoto(prev => ({...prev, [id]: veredito}))
       }
 
+      function listaDeVotos(){
+        return(
+            <div>
+               {voto?.map((item, key) => (
+                   <ul>
+                      <li>{key}: {item}</li>
+                   </ul>
+               ))}
+            </div>
+        )
+      }
+
     return(
         <div class = "caixa_jogador">
             <button onClick={() => {handleRenovar()}}>
@@ -96,13 +108,7 @@ export default function Jogador(props){
          </div>
             : null}
          <div>
-            {voto.map((item, key) => (
-                <div>
-                    <ul>
-                        <li>{key}: {item}</li>
-                    </ul>
-                 </div>             
-            ))}
+            {listaDeVotos()}
          </div>
         </div>
     );
