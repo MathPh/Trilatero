@@ -21,7 +21,7 @@ export default function Jogador(props){
         setJogador1({"id":1, "letra":primeiro})
         setJogador2({"id":2, "letra":segundo})
         setJogador3({"id":3, "letra":terceiro})
-        
+        setVoto(jogadoresIniciais)
     }, [renovar])
 
     useEffect(() => {
@@ -89,7 +89,9 @@ export default function Jogador(props){
     return(
         <div class = "caixa_jogador">
             <button onClick={() => {handleRenovar()}}>
-                RENOVAR
+                Novo jogo 
+                <br/>
+                com novos jogadores
             </button>
             <button onClick={() => {handleVisualizarJogador()}}>
                 Trocar de Jogador
