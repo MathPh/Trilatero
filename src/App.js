@@ -77,6 +77,7 @@ const Canvas = props => {
 
 function App() {
   const [tam, setTam] = useState(8)
+  const [passo, setPasso] = useState(0)
 
   useEffect(() => {
     
@@ -89,6 +90,10 @@ function App() {
     setTam(tam-1)
   }
 
+  function renovacaoDeVotos(){
+    setPasso(passo + 1)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -97,8 +102,8 @@ function App() {
           <button onClick={() => {handleTamDim()}}>-</button>
         </div>
       <Canvas tam={tam} offset={0} size={50} />
-      <Jogador/>
-      <Carta/>
+      <Jogador renovarVotos={passo}/>
+      <Carta renovacaoDeVotos={renovacaoDeVotos}/>
       </header>
     </div>
   );

@@ -3,11 +3,17 @@ import React, { useEffect, useState } from 'react';
 
 export default function Jogador(props){
    
+    const jogadoresIniciais = {
+        "mesa":{"id":"mesa","veredito":"nulo"},
+        "A":{"id":"A","veredito":"nulo"},
+        "B":{"id":"B","veredito":"nulo"},
+        "C":{"id":"C","veredito":"nulo"}}
+    const listaAlfabetica = ["A","B","C"]
     const [renovar,setRenovar] = useState(1)
     const [jogador_1,setJogador1] = useState(0)
     const [jogador_2,setJogador2] = useState(0)
     const [jogador_3,setJogador3] = useState(0)
-    const [voto, setVoto] = useState(["Não","Sim","Sim","Não"])
+    const [voto, setVoto] = useState(jogadoresIniciais)
     const [eu, setEu] = useState(0)
 
     useEffect(() => {
@@ -15,11 +21,16 @@ export default function Jogador(props){
         setJogador1(primeiro)
         setJogador2(segundo)
         setJogador3(terceiro)
+        
     }, [renovar])
 
     useEffect(() => {
         console.log(voto)
     }, [voto])
+
+    useEffect(() => {
+         setVoto(jogadoresIniciais)
+    }, [props.renovarVotos])
 
     //https://stackoverflow.com/a/2450976/9295348
 
@@ -50,19 +61,29 @@ export default function Jogador(props){
       }
 
       function handleVotacao(id, veredito){
-          setVoto(prev => ({...prev, [id]: veredito}))
+          setVoto(prev => ({...prev, [id]:{id: id, veredito: veredito}}))
+          setVoto(prev => ({...prev, "mesa":
+          {id: "mesa", "veredito": Math.round(Math.random())? "Sim": "Não"}}))
       }
 
-      function listaDeVotos(){
-        return(
-            <div>
-               {voto?.map((item, key) => (
-                   <ul>
-                      <li>{key}: {item}</li>
-                   </ul>
-               ))}
-            </div>
-        )
+      function aparecerBotoes(letraDoJogador){
+          return(
+              <div>
+                <p>Jogador {(eu % 3) + 1}: {letraDoJogador}</p> 
+                {voto.[letraDoJogador].veredito === "nulo" ?
+                 <div>
+                     <button onClick={() => {handleVotacao(letraDoJogador,"Sim")}}>
+                         Sim
+                     </button>
+                     <button onClick={() => {handleVotacao(letraDoJogador,"Não")}}>
+                         Não
+                     </button>
+                 </div>
+                 :
+                 <p>Seu voto foi {voto.[letraDoJogador].veredito}</p>
+                 }
+              </div>
+          )
       }
 
     return(
@@ -74,42 +95,21 @@ export default function Jogador(props){
                 Trocar de Jogador
             </button>
             <p>Informações sobre jogador</p>
-            {eu % 3 === 1 ?
+            {listaAlfabetica[eu % 3] === jogador_1 ?
              <div>
-                <p>Jogador 1: {jogador_1}</p> 
-                <button onClick={() => {handleVotacao(1,"Sim")}}>
-                    Sim
-                </button>
-                <button onClick={() => {handleVotacao(1,"Não")}}>
-                    Não
-                </button>
+                {aparecerBotoes(jogador_1)}
              </div>
              : null}
-            {eu % 3 === 2 ? 
+            {listaAlfabetica[eu % 3] === jogador_2 ? 
             <div>
-               <p>Jogador 2: {jogador_2}</p> 
-               <button onClick={() => {handleVotacao(2,"Sim")}}>
-                    Sim
-                </button>
-                <button onClick={() => {handleVotacao(2,"Não")}}>
-                    Não
-                </button>
+               {aparecerBotoes(jogador_2)}
             </div>
             : null}
-            {eu % 3 === 0 ? 
+            {listaAlfabetica[eu % 3] === jogador_3 ? 
             <div>
-            <p>Jogador 3: {jogador_3}</p> 
-            <button onClick={() => {handleVotacao(3,"Sim")}}>
-                 Sim
-             </button>
-             <button onClick={() => {handleVotacao(3,"Não")}}>
-                 Não
-             </button>
-         </div>
+                {aparecerBotoes(jogador_3)}
+            </div>
             : null}
-         <div>
-            {listaDeVotos()}
-         </div>
         </div>
     );
 }
