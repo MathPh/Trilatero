@@ -10,17 +10,17 @@ export default function Jogador(props){
         "C":{"id":"C","veredito":"nulo"}}
     const listaAlfabetica = ["A","B","C"]
     const [renovar,setRenovar] = useState(1)
-    const [jogador_1,setJogador1] = useState(0)
-    const [jogador_2,setJogador2] = useState(0)
-    const [jogador_3,setJogador3] = useState(0)
+    const [jogador_1,setJogador1] = useState({"id":1, "letra":null})
+    const [jogador_2,setJogador2] = useState({"id":2, "letra":null})
+    const [jogador_3,setJogador3] = useState({"id":3, "letra":null})
     const [voto, setVoto] = useState(jogadoresIniciais)
     const [eu, setEu] = useState(0)
 
     useEffect(() => {
         const [primeiro,segundo,terceiro] = shuffle(["A","B","C"])
-        setJogador1(primeiro)
-        setJogador2(segundo)
-        setJogador3(terceiro)
+        setJogador1({"id":1, "letra":primeiro})
+        setJogador2({"id":2, "letra":segundo})
+        setJogador3({"id":3, "letra":terceiro})
         
     }, [renovar])
 
@@ -66,21 +66,21 @@ export default function Jogador(props){
           {id: "mesa", "veredito": Math.round(Math.random())? "Sim": "Não"}}))
       }
 
-      function aparecerBotoes(letraDoJogador){
+      function aparecerBotoes(jogadores){
           return(
               <div>
-                <p>Jogador {(eu % 3) + 1}: {letraDoJogador}</p> 
-                {voto.[letraDoJogador].veredito === "nulo" ?
+                <p>Jogador {jogadores.id}: {jogadores.letra}</p> 
+                {voto.[jogadores.letra].veredito === "nulo" ?
                  <div>
-                     <button onClick={() => {handleVotacao(letraDoJogador,"Sim")}}>
+                     <button onClick={() => {handleVotacao(jogadores.letra,"Sim")}}>
                          Sim
                      </button>
-                     <button onClick={() => {handleVotacao(letraDoJogador,"Não")}}>
+                     <button onClick={() => {handleVotacao(jogadores.letra,"Não")}}>
                          Não
                      </button>
                  </div>
                  :
-                 <p>Seu voto foi {voto.[letraDoJogador].veredito}</p>
+                 <p>Seu voto foi {voto.[jogadores.letra].veredito}</p>
                  }
               </div>
           )
@@ -95,17 +95,17 @@ export default function Jogador(props){
                 Trocar de Jogador
             </button>
             <p>Informações sobre jogador</p>
-            {listaAlfabetica[eu % 3] === jogador_1 ?
+            {listaAlfabetica[eu % 3] === jogador_1.letra ?
              <div>
                 {aparecerBotoes(jogador_1)}
              </div>
              : null}
-            {listaAlfabetica[eu % 3] === jogador_2 ? 
+            {listaAlfabetica[eu % 3] === jogador_2.letra ? 
             <div>
                {aparecerBotoes(jogador_2)}
             </div>
             : null}
-            {listaAlfabetica[eu % 3] === jogador_3 ? 
+            {listaAlfabetica[eu % 3] === jogador_3.letra ? 
             <div>
                 {aparecerBotoes(jogador_3)}
             </div>
