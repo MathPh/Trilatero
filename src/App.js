@@ -9,7 +9,7 @@ import Territorio from './componentes/Territorio.js';
 function App() {
   const [tam, setTam] = useState(8)
   const [passo, setPasso] = useState(0)
-  const [territorio, setTerritorio] = useState(1)
+  const [territorio, setTerritorio] = useState(2)
 
   useEffect(() => {
 
