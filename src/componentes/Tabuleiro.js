@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Stage, Layer, RegularPolygon, Text } from 'react-konva';
 
 class PosicaoCls {
-  constructor(id, x,y,paridade,canvas,lado){
-    this.id = id;
+  constructor(id, x,y,paridade,canvas,lado,i,i2,tam){
+    this.a = i
+    this.b = tam-i+Math.floor(0.5+i2/2)-1
+    this.c = tam-i+Math.floor((2*i+1 - i2)/2)-1
+    this.id = this.a + '-' + this.b + '-' + this.c;
     this.x = x
     this.y = y
     this.paridade = paridade % 2
     this.canvas = canvas
     this.lado = lado //global?
-
+console.log(this.id)
     //return <RegularPolygon />
     //cor?
 
@@ -89,7 +92,7 @@ const Tabuleiro = props => {
         for (let index2 = 0; index2 < 2*index+1; index2++) {
           //tabAux.push(new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*props.size + ((index2 - index)*props.size/2), index*(props.size*Math.sqrt(3))/2, index2, context, props.size))
           
-          setTabuleiro(prev => ([...prev, new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*(props.size*(Math.sqrt(3))) + ((index2 - index)*props.size*(Math.sqrt(3))/2), props.size*1.5*index-(index2%2==0?0:props.size/2), index2, context, props.size)]))
+          setTabuleiro(prev => ([...prev, new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*(props.size*(Math.sqrt(3))) + ((index2 - index)*props.size*(Math.sqrt(3))/2), props.size*1.5*index-(index2%2==0?0:props.size/2), index2, context, props.size,index,index2,props.tam)]))
           ii++
         }
       }
