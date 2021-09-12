@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Stage, Layer, RegularPolygon, Text } from 'react-konva';
+import Token from './Token.js'
 
 class Posicao {
   constructor(i,i2,raio,tam,novo_territorio){
@@ -50,19 +51,18 @@ const Tabuleiro = props => {
     const canvasRef = React.useRef(null)
 
     const [tabuleiro, setTabuleiro] = React.useState([]);
-
+    const [posicaoInicial, setPosicaoInicial] = React.useState(new Posicao(0,0,0,0,0))
     var context = null
     useEffect(() => {
       
   
-      
       var ii = 0
       setTabuleiro([])
       for (let index = 0; index < props.tam; index++) {
         for (let index2 = 0; index2 < 2*index+1; index2++) {
-          //tabAux.push(new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*props.size + ((index2 - index)*props.size/2), index*(props.size*Math.sqrt(3))/2, index2, context, props.size))
           
           setTabuleiro(prev => ([...prev, new Posicao( index,index2, props.size,props.tam,props.territorio)]))
+
           ii++
         }
       }
@@ -70,6 +70,12 @@ const Tabuleiro = props => {
       
       
     },[props.tam, props.territorio])
+
+    useEffect(() => {
+      if(tabuleiro.length > 0)
+        setPosicaoInicial(tabuleiro[Math.floor(tabuleiro.length/2)])
+    },[tabuleiro])
+    
   
     
     return <Stage width={props.size*props.tam*1.74} height={((props.size*props.tam*2))} >
@@ -86,6 +92,7 @@ const Tabuleiro = props => {
             fill={"rgb("+tab.cor.r.toString()+", "+tab.cor.g.toString()+", "+tab.cor.b.toString()+")"}
           />
         ))}
+        <Token posicaoIni={posicaoInicial} />
       </Layer>
     </Stage>
 
