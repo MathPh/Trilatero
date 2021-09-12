@@ -48,6 +48,7 @@ export default function Jogador(props){
       
       function handlePuxarCarta(){
           setRenovarCarta(renovarCarta*-1)
+          props.renovacaoDeVotos()
       }
 
     return(

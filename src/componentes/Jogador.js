@@ -3,23 +3,34 @@ import React, { useEffect, useState } from 'react';
 
 export default function Jogador(props){
    
+    const jogadoresIniciais = {
+        "mesa":{"id":"mesa","veredito":"nulo"},
+        "A":{"id":"A","veredito":"nulo"},
+        "B":{"id":"B","veredito":"nulo"},
+        "C":{"id":"C","veredito":"nulo"}}
+    const listaAlfabetica = ["A","B","C"]
     const [renovar,setRenovar] = useState(1)
-    const [jogador_1,setJogador1] = useState(0)
-    const [jogador_2,setJogador2] = useState(0)
-    const [jogador_3,setJogador3] = useState(0)
-    const [voto, setVoto] = useState(["Não","Sim","Sim","Não"])
+    const [jogador_1,setJogador1] = useState({"id":1, "letra":null})
+    const [jogador_2,setJogador2] = useState({"id":2, "letra":null})
+    const [jogador_3,setJogador3] = useState({"id":3, "letra":null})
+    const [voto, setVoto] = useState(jogadoresIniciais)
     const [eu, setEu] = useState(0)
 
     useEffect(() => {
         const [primeiro,segundo,terceiro] = shuffle(["A","B","C"])
-        setJogador1(primeiro)
-        setJogador2(segundo)
-        setJogador3(terceiro)
+        setJogador1({"id":1, "letra":primeiro})
+        setJogador2({"id":2, "letra":segundo})
+        setJogador3({"id":3, "letra":terceiro})
+        setVoto(jogadoresIniciais)
     }, [renovar])
 
     useEffect(() => {
         console.log(voto)
     }, [voto])
+
+    useEffect(() => {
+         setVoto(jogadoresIniciais)
+    }, [props.renovarVotos])
 
     //https://stackoverflow.com/a/2450976/9295348
 
@@ -50,66 +61,57 @@ export default function Jogador(props){
       }
 
       function handleVotacao(id, veredito){
-          setVoto(prev => ({...prev, [id]: veredito}))
+          setVoto(prev => ({...prev, [id]:{id: id, veredito: veredito}}))
+          setVoto(prev => ({...prev, "mesa":
+          {id: "mesa", "veredito": Math.round(Math.random())? "Sim": "Não"}}))
       }
 
-      function listaDeVotos(){
-        return(
-            <div>
-               {voto?.map((item, key) => (
-                   <ul>
-                      <li>{key}: {item}</li>
-                   </ul>
-               ))}
-            </div>
-        )
+      function aparecerBotoes(jogadores){
+          return(
+              <div>
+                <p>Jogador {jogadores.id}: {jogadores.letra}</p> 
+                {voto.[jogadores.letra].veredito === "nulo" ?
+                 <div>
+                     <button onClick={() => {handleVotacao(jogadores.letra,"Sim")}}>
+                         Sim
+                     </button>
+                     <button onClick={() => {handleVotacao(jogadores.letra,"Não")}}>
+                         Não
+                     </button>
+                 </div>
+                 :
+                 <p>Seu voto foi {voto.[jogadores.letra].veredito}</p>
+                 }
+              </div>
+          )
       }
 
     return(
         <div class = "caixa_jogador">
             <button onClick={() => {handleRenovar()}}>
-                RENOVAR
+                Novo jogo 
+                <br/>
+                com novos jogadores
             </button>
             <button onClick={() => {handleVisualizarJogador()}}>
                 Trocar de Jogador
             </button>
             <p>Informações sobre jogador</p>
-            {eu % 3 === 1 ?
+            {listaAlfabetica[eu % 3] === jogador_1.letra ?
              <div>
-                <p>Jogador 1: {jogador_1}</p> 
-                <button onClick={() => {handleVotacao(1,"Sim")}}>
-                    Sim
-                </button>
-                <button onClick={() => {handleVotacao(1,"Não")}}>
-                    Não
-                </button>
+                {aparecerBotoes(jogador_1)}
              </div>
              : null}
-            {eu % 3 === 2 ? 
+            {listaAlfabetica[eu % 3] === jogador_2.letra ? 
             <div>
-               <p>Jogador 2: {jogador_2}</p> 
-               <button onClick={() => {handleVotacao(2,"Sim")}}>
-                    Sim
-                </button>
-                <button onClick={() => {handleVotacao(2,"Não")}}>
-                    Não
-                </button>
+               {aparecerBotoes(jogador_2)}
             </div>
             : null}
-            {eu % 3 === 0 ? 
+            {listaAlfabetica[eu % 3] === jogador_3.letra ? 
             <div>
-            <p>Jogador 3: {jogador_3}</p> 
-            <button onClick={() => {handleVotacao(3,"Sim")}}>
-                 Sim
-             </button>
-             <button onClick={() => {handleVotacao(3,"Não")}}>
-                 Não
-             </button>
-         </div>
+                {aparecerBotoes(jogador_3)}
+            </div>
             : null}
-         <div>
-            {listaDeVotos()}
-         </div>
         </div>
     );
 }
