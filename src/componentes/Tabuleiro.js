@@ -92,7 +92,7 @@ const Tabuleiro = props => {
         for (let index2 = 0; index2 < 2*index+1; index2++) {
           //tabAux.push(new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*props.size + ((index2 - index)*props.size/2), index*(props.size*Math.sqrt(3))/2, index2, context, props.size))
           
-          setTabuleiro(prev => ([...prev, new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*(props.size*(Math.sqrt(3))) + ((index2 - index)*props.size*(Math.sqrt(3))/2), props.size*1.5*index-(index2%2==0?0:props.size/2), index2, context, props.size,index,index2,props.tam)]))
+          setTabuleiro(prev => ([...prev, new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*(props.size*(Math.sqrt(3))) + ((index2 - index)*props.size*(Math.sqrt(3))/2), props.size*1.5*index-(index2%2==0?0:props.size/2) + props.size, index2, context, props.size,index,index2,props.tam)]))
           ii++
         }
       }
@@ -103,7 +103,7 @@ const Tabuleiro = props => {
     },[props.tam])
   
     
-    return <Stage width={props.size*props.tam} height={((props.size*Math.sqrt(3))/2)*props.tam} >
+    return <Stage width={props.size*props.tam*1.74} height={((props.size*props.tam*2))} >
       <Layer>
       {tabuleiro.map((tab) => (
           <RegularPolygon
