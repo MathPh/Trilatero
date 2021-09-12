@@ -9,10 +9,10 @@ import Territorio from './componentes/Territorio.js';
 function App() {
   const [tam, setTam] = useState(8)
   const [passo, setPasso] = useState(0)
-  const [territorio, setTerritorio] = useState(0)
+  const [territorio, setTerritorio] = useState(1)
 
   useEffect(() => {
-    
+
   }, [tam, territorio])
   
   function handleTamAum(){
@@ -41,7 +41,7 @@ function App() {
           <button onClick={() => {handleTamAum()}}>+</button>
           <button onClick={() => {handleTamDim()}}>-</button>
         </div>
-      <Tabuleiro tam={tam} offset={0} size={50} />
+      <Tabuleiro tam={tam} offset={0} size={50} territorio={territorio}/>
       <Jogador renovarVotos={passo}/>
       <Carta renovacaoDeVotos={renovacaoDeVotos}/>
       <Territorio handleTerritorioAum={handleTerritorioAum} handleTerritorioDim={handleTerritorioDim}/>

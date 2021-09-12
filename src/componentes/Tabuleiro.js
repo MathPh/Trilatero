@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Stage, Layer, RegularPolygon, Text } from 'react-konva';
 
 class PosicaoCls {
-  constructor(id, x,y,paridade,canvas,lado,i,i2,tam){
-    var territorio = 2
+  constructor(id, x,y,paridade,canvas,lado,i,i2,tam,novo_territorio){
+    var territorio = novo_territorio
     this.a = i
     this.b2 = tam-i+Math.floor(0.5+i2/2)-1
     this.c = tam-i+Math.floor((2*i+1 - i2)/2)-1
@@ -120,7 +120,7 @@ const Tabuleiro = props => {
         for (let index2 = 0; index2 < 2*index+1; index2++) {
           //tabAux.push(new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*props.size + ((index2 - index)*props.size/2), index*(props.size*Math.sqrt(3))/2, index2, context, props.size))
           
-          setTabuleiro(prev => ([...prev, new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*(props.size*(Math.sqrt(3))) + ((index2 - index)*props.size*(Math.sqrt(3))/2), props.size*1.5*index-(index2%2==0?0:props.size/2) + props.size, index2, context, props.size,index,index2,props.tam)]))
+          setTabuleiro(prev => ([...prev, new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*(props.size*(Math.sqrt(3))) + ((index2 - index)*props.size*(Math.sqrt(3))/2), props.size*1.5*index-(index2%2==0?0:props.size/2) + props.size, index2, context, props.size,index,index2,props.tam,props.territorio)]))
           ii++
         }
       }
@@ -128,7 +128,7 @@ const Tabuleiro = props => {
       
       console.log("Saida")
       
-    },[props.tam])
+    },[props.tam, props.territorio])
   
     
     return <Stage width={props.size*props.tam*1.74} height={((props.size*props.tam*2))} >
