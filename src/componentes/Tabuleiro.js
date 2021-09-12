@@ -1,103 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { Stage, Layer, RegularPolygon, Text } from 'react-konva';
 
-class PosicaoCls {
-  constructor(id, x,y,paridade,canvas,lado,i,i2,tam){
+class Posicao {
+  constructor(i,i2,raio,tam){
     var territorio = 2
-    this.a = i
-    this.b2 = tam-i+Math.floor(0.5+i2/2)-1
-    this.c = tam-i+Math.floor((2*i+1 - i2)/2)-1
-    this.id = this.a + '-' + this.b2 + '-' + this.c;
-    this.x = x
-    this.y = y
-    this.paridade = paridade % 2
-    this.canvas = canvas
-    this.lado = lado //global?
-    console.log(this.id)
 
-    this.r = 255
-    this.g = 255
-    this.b = 255
+    this.a = i
+    this.b = tam-i+Math.floor(0.5+i2/2)-1
+    this.c = tam-i+Math.floor((2*i+1 - i2)/2)-1
+
+    this.id = this.a + '-' + this.b + '-' + this.c;
+
+    this.paridade = i2 % 2
+    this.posicao = {'x':0,'y':0}
+    this.posicao.x = tam/2*(raio*(Math.sqrt(3))) + ((i2 - i)*raio*(Math.sqrt(3))/2)
+    this.posicao.y = raio*1.5*i-(this.paridade==0?0:raio/2)+raio
+    
+    this.raio = raio //global?
+
+    this.cor = {'r':190,'g':190,'b':190}
 
     if(this.a <= territorio){
-      this.r = 255
-      this.g = 190
-      this.b = 190
+      this.cor.r += 50
     }
-    if(this.b2 <= territorio){
-      this.r = 190
-      this.g = 255
-      this.b = 190
+    if(this.b <= territorio){
+      this.cor.g += 50
     }
     if(this.c <= territorio){
-      this.r = 190
-      this.g = 190
-      this.b = 255
+      this.cor.b += 50
     }
 
     if(this.paridade == 0){
-      this.r -=50
-      this.b -=50
-      this.g -=50
+      this.cor.r -=50
+      this.cor.b -=50
+      this.cor.g -=50
     }
 
-    //return <RegularPolygon />
-    //cor?
-
-
-  }
-
-  draw3(){
-    var h = (this.lado*Math.sqrt(3))/2;
-    if(this.paridade % 2 == 1){
-
-      this.canvas.lineWidth = 1;
-      this.canvas.beginPath();
-
-      this.canvas.moveTo (this.x-this.lado/2,this.y-h);
-      this.canvas.lineTo (this.x+this.lado/2,this.y-h);
-      this.canvas.lineTo (this.x,this.y);
-      this.canvas.closePath ();
-      this.canvas.stroke ();
-
-
-    }else {
-      this.canvas.lineWidth = 1;
-      this.canvas.beginPath();
-
-      this.canvas.moveTo (this.x,this.y-h);
-      this.canvas.lineTo (this.x-this.lado/2,this.y);
-      this.canvas.lineTo (this.x+this.lado/2,this.y);
-      this.canvas.closePath ();
-      this.canvas.fillStyle   ="red";
-      this.canvas.fill ();
-    }
-
-}
-
-  draw(){
-
-    var h = (this.lado*Math.sqrt(3))/2;
-    this.obj.lineWidth = 1;
-
-    if(this.paridade % 2 == 1){
-
-      this.obj.moveTo (this.x-this.lado/2,this.y-h);
-      this.obj.lineTo (this.x+this.lado/2,this.y-h);
-      this.obj.lineTo (this.x,this.y);
-
-
-    }else {
-
-      this.obj.moveTo (this.x,this.y-h);
-      this.obj.lineTo (this.x-this.lado/2,this.y);
-      this.obj.lineTo (this.x+this.lado/2,this.y);
-
-    }
-
-    this.obj.closePath ();
-    this.obj.className = "abc";
-    this.canvas.stroke (this.obj);
 
   }
 
@@ -120,13 +58,12 @@ const Tabuleiro = props => {
         for (let index2 = 0; index2 < 2*index+1; index2++) {
           //tabAux.push(new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*props.size + ((index2 - index)*props.size/2), index*(props.size*Math.sqrt(3))/2, index2, context, props.size))
           
-          setTabuleiro(prev => ([...prev, new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*(props.size*(Math.sqrt(3))) + ((index2 - index)*props.size*(Math.sqrt(3))/2), props.size*1.5*index-(index2%2==0?0:props.size/2) + props.size, index2, context, props.size,index,index2,props.tam)]))
+          setTabuleiro(prev => ([...prev, new Posicao( index,index2, props.size,props.tam)]))
           ii++
         }
       }
       
       
-      console.log("Saida")
       
     },[props.tam])
   
@@ -137,12 +74,12 @@ const Tabuleiro = props => {
           <RegularPolygon
             key={tab.id}
             id={tab.id}
-            x={tab.x}
-            y={tab.y}
+            x={tab.posicao.x}
+            y={tab.posicao.y}
             rotation={tab.paridade == 0?0:180}
             sides={3}
-            radius={tab.lado}
-            fill={"rgb("+tab.r.toString()+", "+tab.g.toString()+", "+tab.b.toString()+")"}
+            radius={tab.raio}
+            fill={"rgb("+tab.cor.r.toString()+", "+tab.cor.g.toString()+", "+tab.cor.b.toString()+")"}
           />
         ))}
       </Layer>
