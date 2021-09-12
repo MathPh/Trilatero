@@ -3,16 +3,44 @@ import { Stage, Layer, RegularPolygon, Text } from 'react-konva';
 
 class PosicaoCls {
   constructor(id, x,y,paridade,canvas,lado,i,i2,tam){
+    var territorio = 2
     this.a = i
-    this.b = tam-i+Math.floor(0.5+i2/2)-1
+    this.b2 = tam-i+Math.floor(0.5+i2/2)-1
     this.c = tam-i+Math.floor((2*i+1 - i2)/2)-1
-    this.id = this.a + '-' + this.b + '-' + this.c;
+    this.id = this.a + '-' + this.b2 + '-' + this.c;
     this.x = x
     this.y = y
     this.paridade = paridade % 2
     this.canvas = canvas
     this.lado = lado //global?
-console.log(this.id)
+    console.log(this.id)
+
+    this.r = 255
+    this.g = 255
+    this.b = 255
+
+    if(this.a <= territorio){
+      this.r = 255
+      this.g = 190
+      this.b = 190
+    }
+    if(this.b2 <= territorio){
+      this.r = 190
+      this.g = 255
+      this.b = 190
+    }
+    if(this.c <= territorio){
+      this.r = 190
+      this.g = 190
+      this.b = 255
+    }
+
+    if(this.paridade == 0){
+      this.r -=50
+      this.b -=50
+      this.g -=50
+    }
+
     //return <RegularPolygon />
     //cor?
 
@@ -114,7 +142,7 @@ const Tabuleiro = props => {
             rotation={tab.paridade == 0?0:180}
             sides={3}
             radius={tab.lado}
-            fill={tab.paridade == 0?"#89b717":"#900000"}
+            fill={"rgb("+tab.r.toString()+", "+tab.g.toString()+", "+tab.b.toString()+")"}
           />
         ))}
       </Layer>
