@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Stage, Layer, RegularPolygon, Text } from 'react-konva';
 
 class Posicao {
-  constructor(i,i2,raio,tam){
-    var territorio = 2
+  constructor(i,i2,raio,tam,novo_territorio){
+    var territorio = novo_territorio
 
     this.a = i
     this.b = tam-i+Math.floor(0.5+i2/2)-1
@@ -12,22 +12,26 @@ class Posicao {
     this.id = this.a + '-' + this.b + '-' + this.c;
 
     this.paridade = i2 % 2
+
     this.posicao = {'x':0,'y':0}
     this.posicao.x = tam/2*(raio*(Math.sqrt(3))) + ((i2 - i)*raio*(Math.sqrt(3))/2)
     this.posicao.y = raio*1.5*i-(this.paridade==0?0:raio/2)+raio
     
     this.raio = raio //global?
 
-    this.cor = {'r':190,'g':190,'b':190}
+    this.cor = {'r':255,'g':255,'b':255}
 
     if(this.a <= territorio){
-      this.cor.r += 50
+      this.cor.g -= 50
+      this.cor.b -= 50
     }
     if(this.b <= territorio){
-      this.cor.g += 50
+      this.cor.r -= 50
+      this.cor.b -= 50
     }
     if(this.c <= territorio){
-      this.cor.b += 50
+      this.cor.r -= 50
+      this.cor.g -= 50
     }
 
     if(this.paridade == 0){
@@ -58,14 +62,14 @@ const Tabuleiro = props => {
         for (let index2 = 0; index2 < 2*index+1; index2++) {
           //tabAux.push(new PosicaoCls(index.toString() + "-" + index2.toString(), props.tam/2*props.size + ((index2 - index)*props.size/2), index*(props.size*Math.sqrt(3))/2, index2, context, props.size))
           
-          setTabuleiro(prev => ([...prev, new Posicao( index,index2, props.size,props.tam)]))
+          setTabuleiro(prev => ([...prev, new Posicao( index,index2, props.size,props.tam,props.territorio)]))
           ii++
         }
       }
       
       
       
-    },[props.tam])
+    },[props.tam, props.territorio])
   
     
     return <Stage width={props.size*props.tam*1.74} height={((props.size*props.tam*2))} >
