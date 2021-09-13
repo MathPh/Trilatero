@@ -72,8 +72,19 @@ const Tabuleiro = props => {
     },[props.tam, props.territorio])
 
     useEffect(() => {
+      console.log((props.tam - 1))
+      //console.log(Math.floor(((props.tam - 1)/3)*2 + ((props.tam - 1) % 3)))
+      const valor = Math.floor(((props.tam - 1)/3)*2 + ((props.tam - 1) % 3))
+      const identidade = valor+"-"+valor+"-"+valor
+      console.log(identidade)
+      console.log(tabuleiro.find(item => item.id == identidade))
+
       if(tabuleiro.length > 0)
-        setPosicaoInicial(tabuleiro[Math.floor(tabuleiro.length/2)])
+        if((props.tam - 1)%3 == 2){
+          setPosicaoInicial(tabuleiro[Math.floor(tabuleiro.length/2)])
+        } else {
+          setPosicaoInicial(tabuleiro.find(item => item.id == identidade))
+        }
     },[tabuleiro])
     
   
