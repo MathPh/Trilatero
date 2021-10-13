@@ -5,11 +5,11 @@ import imagem from '../assets/token.jpg'
 
 const Token = props => {
     const [image] = useImage(imagem)
-    const [posicao, setPosicao] = React.useState(props.posicaoIni);
+    const [posicao, setPosicao] = React.useState(props.posicao);
     useEffect(() => {
-        console.log(props.posicaoIni)
-        setPosicao(props.posicaoIni)
-    },[props.posicaoIni])
+        console.log(props.posicao)
+        setPosicao(props.posicao)
+    },[props.posicao])
 
     return <RegularPolygon 
     sides={6} 

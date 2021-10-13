@@ -44,6 +44,11 @@ class Posicao {
 
   }
 
+  distancia(posicao){
+    
+    return Math.abs(this.a - posicao.a) + Math.abs(this.b - posicao.b) + Math.abs(this.c - posicao.c);
+  }
+
 } 
 
 const Tabuleiro = props => {
@@ -51,7 +56,7 @@ const Tabuleiro = props => {
     const canvasRef = React.useRef(null)
 
     const [tabuleiro, setTabuleiro] = React.useState([]);
-    const [posicaoInicial, setPosicaoInicial] = React.useState(new Posicao(0,0,0,0,0))
+    const [posicaoToken, setPosicaoToken] = React.useState(new Posicao(0,0,0,0,0))
     var context = null
     useEffect(() => {
       
@@ -81,15 +86,91 @@ const Tabuleiro = props => {
 
       if(tabuleiro.length > 0)
         if((props.tam - 1)%3 == 2){
-          setPosicaoInicial(tabuleiro[Math.floor(tabuleiro.length/2)])
+          setPosicaoToken(tabuleiro[Math.floor(tabuleiro.length/2)])
         } else {
-          setPosicaoInicial(tabuleiro.find(item => item.id == identidade))
+          setPosicaoToken(tabuleiro.find(item => item.id == identidade))
         }
     },[tabuleiro])
+
+    function moveToken(carta){
+      
+      var novaPos
+      var pos = null
+      var d = carta.distancia
+
+      if(carta.polaridade == "-"){
+        if(carta.direcao == "BC"){
+
+          if(d > posicaoToken.a) d = posicaoToken.a
+
+          var a = posicaoToken.a-d
+          var b = posicaoToken.b+Math.floor((d+1-posicaoToken.paridade)/2)
+          var c = posicaoToken.c+Math.floor((d+1-posicaoToken.paridade)/2)
+
+          novaPos = {a: a, b: b, c: c}
+        } else if(carta.direcao == "AC"){
+
+          if(d > posicaoToken.b) d = posicaoToken.b
+
+          var a = posicaoToken.a+Math.floor((d+1-posicaoToken.paridade)/2)
+          var b = posicaoToken.b-d
+          var c = posicaoToken.c+Math.floor((d+1-posicaoToken.paridade)/2)
+
+          novaPos = {a: a, b: b, c: c}
+        } else if(carta.direcao == "AB"){
+
+          if(d > posicaoToken.c) d = posicaoToken.c
+
+          var a = posicaoToken.a+Math.floor((d+1-posicaoToken.paridade)/2)
+          var b = posicaoToken.b+Math.floor((d+1-posicaoToken.paridade)/2)
+          var c = posicaoToken.c-d
+
+          novaPos = {a: a, b: b, c: c}
+        }
+
+      } else if(carta.polaridade == "+"){
+        if(carta.direcao == "BC"){
+          
+          if(d + posicaoToken.a >= props.tam) d = props.tam - posicaoToken.a -1
+
+          var a = posicaoToken.a+d
+          var b = posicaoToken.b-Math.floor((d+posicaoToken.paridade)/2)
+          var c = posicaoToken.c-Math.floor((d+posicaoToken.paridade)/2)
+
+          novaPos = {a: a, b: b, c: c}
+        } else if(carta.direcao == "AC"){
+
+          if(d + posicaoToken.b >= props.tam) d = props.tam - posicaoToken.b -1
+
+          var a = posicaoToken.a-Math.floor((d+posicaoToken.paridade)/2)
+          var b = posicaoToken.b+d
+          var c = posicaoToken.c-Math.floor((d+posicaoToken.paridade)/2)
+
+          novaPos = {a: a, b: b, c: c}
+        } else if(carta.direcao == "AB"){
+
+          if(d + posicaoToken.c >= props.tam) d = props.tam - posicaoToken.c -1
+
+          var a = posicaoToken.a-Math.floor((d+posicaoToken.paridade)/2)
+          var b = posicaoToken.b-Math.floor((d+posicaoToken.paridade)/2)
+          var c = posicaoToken.c+d
+
+          novaPos = {a: a, b: b, c: c}
+        }
+
+      }
+
+      for (const p of tabuleiro){
+        if (p.distancia(novaPos) == 0) pos = p
+      }
+      console.log(novaPos)
+      console.log(pos)
+      if(pos !== null){
+        setPosicaoToken(pos)
+      }
+    }
     
-  
-    
-    return <Stage width={props.size*props.tam*1.74} height={((props.size*props.tam*2))} >
+    return (<div><Stage width={props.size*props.tam*1.74} height={((props.size*props.tam*2))} >
       <Layer>
       {tabuleiro.map((tab) => (
           <RegularPolygon
@@ -103,9 +184,12 @@ const Tabuleiro = props => {
             fill={"rgb("+tab.cor.r.toString()+", "+tab.cor.g.toString()+", "+tab.cor.b.toString()+")"}
           />
         ))}
-        <Token posicaoIni={posicaoInicial} />
+        <Token posicao={posicaoToken} key="Token" />
       </Layer>
     </Stage>
+    <button onClick={() => {moveToken({direcao:"BC",distancia:2,polaridade:"+"})}}>
+        Testa movimento
+    </button></div>);
 
     //return <canvas ref={canvasRef} width={props.size*props.tam} height={((props.size*Math.sqrt(3))/2)*props.tam} style={{border:"1px solid #000000"}, {background: "#FFFFFF"}}/>
   }
