@@ -10,11 +10,16 @@ function App() {
   const [tam, setTam] = useState(8)
   const [passo, setPasso] = useState(0)
   const [territorio, setTerritorio] = useState(2)
+  const [resultado, setResultado] = useState(0)
 
   useEffect(() => {
-
+     
   }, [tam, territorio])
   
+  useEffect(() => {
+     console.log(resultado)
+  }, [resultado])
+
   function handleTamAum(){
     setTam(tam+1)
   }
@@ -31,7 +36,20 @@ function App() {
 
 
   function renovacaoDeVotos(){
+    setResultado(0)
     setPasso(passo + 1)
+  }
+
+  function handleConfirmar(){
+    setResultado(1)
+  }
+
+  function handleMentir(){
+    setResultado(-1)
+  }
+
+  function handleTrucarChapeu(){
+    setResultado(resultado*2)
   }
 
   return (
@@ -42,7 +60,7 @@ function App() {
           <button onClick={() => {handleTamDim()}}>-</button>
         </div>
       <Tabuleiro tam={tam} offset={0} size={50} territorio={territorio}/>
-      <Jogador renovarVotos={passo}/>
+      <Jogador renovarVotos={passo} handleConfirmar={handleConfirmar} handleMentir={handleMentir} handleTrucarChapeu={handleTrucarChapeu} resultado={resultado}/>
       <Carta renovacaoDeVotos={renovacaoDeVotos}/>
       <Territorio handleTerritorioAum={handleTerritorioAum} handleTerritorioDim={handleTerritorioDim}/>
       </header>
