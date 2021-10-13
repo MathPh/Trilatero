@@ -10,17 +10,17 @@ export default function Jogador(props){
         "C":{"id":"C","veredito":"nulo"}}
     const listaAlfabetica = ["A","B","C"]
     const [renovar,setRenovar] = useState(1)
+    const [jogador_0,setJogador0] = useState({"id":0, "letra":null})
     const [jogador_1,setJogador1] = useState({"id":1, "letra":null})
     const [jogador_2,setJogador2] = useState({"id":2, "letra":null})
-    const [jogador_3,setJogador3] = useState({"id":3, "letra":null})
     const [voto, setVoto] = useState(jogadoresIniciais)
     const [eu, setEu] = useState(0)
 
     useEffect(() => {
         const [primeiro,segundo,terceiro] = shuffle(["A","B","C"])
-        setJogador1({"id":1, "letra":primeiro})
-        setJogador2({"id":2, "letra":segundo})
-        setJogador3({"id":3, "letra":terceiro})
+        setJogador0({"id":0, "letra":primeiro})
+        setJogador1({"id":1, "letra":segundo})
+        setJogador2({"id":2, "letra":terceiro})
         setVoto(jogadoresIniciais)
     }, [renovar])
 
@@ -29,8 +29,13 @@ export default function Jogador(props){
     }, [voto])
 
     useEffect(() => {
-         setVoto(jogadoresIniciais)
+        setVoto(jogadoresIniciais)
     }, [props.renovarVotos])
+
+    useEffect(() => {
+        console.log("valor dealer: ",props.renovarVotos % 3);
+        console.log("eu: ", eu % 3);
+    }, [eu, props.renovarVotos])
 
     //https://stackoverflow.com/a/2450976/9295348
 
@@ -97,20 +102,76 @@ export default function Jogador(props){
                 Trocar de Jogador
             </button>
             <p>Informações sobre jogador</p>
-            {listaAlfabetica[eu % 3] === jogador_1.letra ?
+            {listaAlfabetica[eu % 3 ] === jogador_0.letra ?
              <div>
-                {aparecerBotoes(jogador_1)}
+                {aparecerBotoes(jogador_0)}
              </div>
              : null}
-            {listaAlfabetica[eu % 3] === jogador_2.letra ? 
+            {listaAlfabetica[eu % 3] === jogador_1.letra ? 
             <div>
-               {aparecerBotoes(jogador_2)}
+               {aparecerBotoes(jogador_1)}
             </div>
             : null}
-            {listaAlfabetica[eu % 3] === jogador_3.letra ? 
+            {listaAlfabetica[eu % 3] === jogador_2.letra ? 
             <div>
-                {aparecerBotoes(jogador_3)}
+                {aparecerBotoes(jogador_2)}
             </div>
+            : null}
+            {voto["A"].veredito != "nulo"
+            & voto["B"].veredito != "nulo"
+            & voto["C"].veredito != "nulo"
+            & voto["mesa"].veredito != "nulo"  ? 
+                <div>{props.renovarVotos % 3 == eu % 3 ? 
+                    <div>
+                <a></a>
+                <a>CHAPEU</a>
+                <p>
+                    <a>Sim: </a>
+                    <a>
+                        {
+                        (voto["A"].veredito == "Sim" ? 1:0)
+                        +(voto["B"].veredito == "Sim" ? 1:0)
+                        +(voto["C"].veredito == "Sim" ? 1:0)
+                        +(voto["mesa"].veredito == "Sim" ? 1:0)
+                        }
+                    </a>
+                </p>
+                <p>
+                    <a>Não: </a>
+                    <a>
+                        {
+                        (voto["A"].veredito == "Não" ? 1:0)
+                        +(voto["B"].veredito == "Não" ? 1:0)
+                        +(voto["C"].veredito == "Não" ? 1:0)
+                        +(voto["mesa"].veredito == "Não" ? 1:0)
+                        }
+                    </a>
+                </p>
+                <div>
+                    {
+                       Math.abs(props.resultado) == 0 ?
+                       <div>
+                         <button onClick={() => {props.handleConfirmar()}}>
+                            Confirmar
+                         </button>
+                         <button onClick={() => {props.handleMentir()}}>
+                            Mentir
+                        </button>
+                       </div> 
+                       : null 
+                    }
+                </div>
+            </div>
+                    : 
+                    <div> 
+                        {Math.abs(props.resultado) == 1 ?
+                        <button onClick={() => {props.handleTrucarChapeu()}}>
+                            Truco o Chapeu
+                        </button> : null
+                        }
+                    </div>
+                    }
+                </div>
             : null}
         </div>
     );
