@@ -92,6 +92,12 @@ const Tabuleiro = props => {
         }
     },[tabuleiro])
 
+    useEffect(() => {
+      if(props.movimento !== null){
+        moveToken(props.movimento)
+      }
+    }, [props.movimento])
+
     function moveToken(carta){
       
       var novaPos
@@ -158,7 +164,7 @@ const Tabuleiro = props => {
           novaPos = {a: a, b: b, c: c}
         }
 
-      }
+      } else return
 
       for (const p of tabuleiro){
         if (p.distancia(novaPos) == 0) pos = p
@@ -170,7 +176,7 @@ const Tabuleiro = props => {
       }
     }
     
-    return (<div><Stage width={props.size*props.tam*1.74} height={((props.size*props.tam*2))} >
+    return (<Stage width={props.size*props.tam*1.74} height={((props.size*props.tam*2))} >
       <Layer>
       {tabuleiro.map((tab) => (
           <RegularPolygon
@@ -186,10 +192,7 @@ const Tabuleiro = props => {
         ))}
         <Token posicao={posicaoToken} key="Token" />
       </Layer>
-    </Stage>
-    <button onClick={() => {moveToken({direcao:"BC",distancia:2,polaridade:"+"})}}>
-        Testa movimento
-    </button></div>);
+    </Stage>);
 
     //return <canvas ref={canvasRef} width={props.size*props.tam} height={((props.size*Math.sqrt(3))/2)*props.tam} style={{border:"1px solid #000000"}, {background: "#FFFFFF"}}/>
   }
