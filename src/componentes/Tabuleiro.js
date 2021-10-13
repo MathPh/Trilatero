@@ -93,7 +93,8 @@ const Tabuleiro = props => {
     },[tabuleiro])
 
     useEffect(() => {
-      if(props.movimento != null){
+
+      if(props.movimento !== null){
         moveToken(props.movimento)
       }
     }, [props.movimento])
@@ -152,6 +153,7 @@ const Tabuleiro = props => {
             c = posicaoToken.c+1
 
           }
+
 
         } else return
         if(a < 0 || a >= props.tam || b < 0 || b >= props.tam || c < 0 || c >= props.tam) break
