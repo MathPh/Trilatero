@@ -4,14 +4,18 @@ import React, { useEffect, useState } from 'react';
 export default function Jogador(props){
    
     const [renovarCarta,setRenovarCarta] = useState(1)
-    const [carta,setCarta] = useState(0)
-    const [valor, setValor] = useState(0)
+    const [carta, setCarta] = useState(null)
 
     useEffect(() => {
-        const [cartanova] = shuffle(["AB","BC","AC"])
-        setCarta(cartanova)
-        setValor(distribuirValorAleatorio())
+        const [direcaonova] = shuffle(["AB","BC","AC"])
+        var cartaAux = {direcao:direcaonova, distancia:distribuirValorAleatorio(), polaridade:""}
+        setCarta(cartaAux)
+        
     }, [renovarCarta])
+
+    useEffect(() =>{
+        props.renovacaoDeVotos(carta)
+    },[carta])
 
     //https://stackoverflow.com/a/2450976/9295348
 
@@ -48,7 +52,7 @@ export default function Jogador(props){
       
       function handlePuxarCarta(){
           setRenovarCarta(renovarCarta*-1)
-          props.renovacaoDeVotos()
+          
       }
 
     return(
@@ -56,8 +60,8 @@ export default function Jogador(props){
             <button onClick={() => {handlePuxarCarta()}}>
                 Puxar carta
             </button>
-            <p>Carta: {carta}</p>
-            <p>Valor: {valor}</p>
+            <p>Carta: {carta?.direcao}</p>
+            <p>Valor: {carta?.distancia}</p>
         </div>
     );
 }

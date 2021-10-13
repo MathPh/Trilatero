@@ -92,73 +92,73 @@ const Tabuleiro = props => {
         }
     },[tabuleiro])
 
+    useEffect(() => {
+      if(props.movimento != null){
+        moveToken(props.movimento)
+      }
+    }, [props.movimento])
+
     function moveToken(carta){
       
-      var novaPos
+      var novaPos = posicaoToken
       var pos = null
-      var d = carta.distancia
+      for(var cont = 0; cont < carta.distancia; cont++){
+        var a,b,c
+      
+        if(carta.polaridade == "-"){
+          if(carta.direcao == "BC"){
 
-      if(carta.polaridade == "-"){
-        if(carta.direcao == "BC"){
 
-          if(d > posicaoToken.a) d = posicaoToken.a
+            a = posicaoToken.a-1
+            b = posicaoToken.b+Math.floor((1+1-posicaoToken.paridade)/2)
+            c = posicaoToken.c+Math.floor((1+1-posicaoToken.paridade)/2)
 
-          var a = posicaoToken.a-d
-          var b = posicaoToken.b+Math.floor((d+1-posicaoToken.paridade)/2)
-          var c = posicaoToken.c+Math.floor((d+1-posicaoToken.paridade)/2)
+          } else if(carta.direcao == "AC"){
 
-          novaPos = {a: a, b: b, c: c}
-        } else if(carta.direcao == "AC"){
 
-          if(d > posicaoToken.b) d = posicaoToken.b
+            a = posicaoToken.a+Math.floor((1+1-posicaoToken.paridade)/2)
+            b = posicaoToken.b-1
+            c = posicaoToken.c+Math.floor((1+1-posicaoToken.paridade)/2)
 
-          var a = posicaoToken.a+Math.floor((d+1-posicaoToken.paridade)/2)
-          var b = posicaoToken.b-d
-          var c = posicaoToken.c+Math.floor((d+1-posicaoToken.paridade)/2)
+          } else if(carta.direcao == "AB"){
 
-          novaPos = {a: a, b: b, c: c}
-        } else if(carta.direcao == "AB"){
 
-          if(d > posicaoToken.c) d = posicaoToken.c
+            a = posicaoToken.a+Math.floor((1+1-posicaoToken.paridade)/2)
+            b = posicaoToken.b+Math.floor((1+1-posicaoToken.paridade)/2)
+            c = posicaoToken.c-1
 
-          var a = posicaoToken.a+Math.floor((d+1-posicaoToken.paridade)/2)
-          var b = posicaoToken.b+Math.floor((d+1-posicaoToken.paridade)/2)
-          var c = posicaoToken.c-d
+          }
 
-          novaPos = {a: a, b: b, c: c}
-        }
+        } else if(carta.polaridade == "+"){
+          if(carta.direcao == "BC"){
+            
 
-      } else if(carta.polaridade == "+"){
-        if(carta.direcao == "BC"){
-          
-          if(d + posicaoToken.a >= props.tam) d = props.tam - posicaoToken.a -1
+            a = posicaoToken.a+1
+            b = posicaoToken.b-Math.floor((1+posicaoToken.paridade)/2)
+            c = posicaoToken.c-Math.floor((1+posicaoToken.paridade)/2)
 
-          var a = posicaoToken.a+d
-          var b = posicaoToken.b-Math.floor((d+posicaoToken.paridade)/2)
-          var c = posicaoToken.c-Math.floor((d+posicaoToken.paridade)/2)
+          } else if(carta.direcao == "AC"){
 
-          novaPos = {a: a, b: b, c: c}
-        } else if(carta.direcao == "AC"){
 
-          if(d + posicaoToken.b >= props.tam) d = props.tam - posicaoToken.b -1
+            a = posicaoToken.a-Math.floor((1+posicaoToken.paridade)/2)
+            b = posicaoToken.b+1
+            c = posicaoToken.c-Math.floor((1+posicaoToken.paridade)/2)
 
-          var a = posicaoToken.a-Math.floor((d+posicaoToken.paridade)/2)
-          var b = posicaoToken.b+d
-          var c = posicaoToken.c-Math.floor((d+posicaoToken.paridade)/2)
+          } else if(carta.direcao == "AB"){
 
-          novaPos = {a: a, b: b, c: c}
-        } else if(carta.direcao == "AB"){
 
-          if(d + posicaoToken.c >= props.tam) d = props.tam - posicaoToken.c -1
+            a = posicaoToken.a-Math.floor((1+posicaoToken.paridade)/2)
+            b = posicaoToken.b-Math.floor((1+posicaoToken.paridade)/2)
+            c = posicaoToken.c+1
 
-          var a = posicaoToken.a-Math.floor((d+posicaoToken.paridade)/2)
-          var b = posicaoToken.b-Math.floor((d+posicaoToken.paridade)/2)
-          var c = posicaoToken.c+d
+          }
 
-          novaPos = {a: a, b: b, c: c}
-        }
-
+        } else return
+        if(a < 0 || a >= props.tam || b < 0 || b >= props.tam || c < 0 || c >= props.tam) break
+        novaPos = {a: a, b: b, c: c}
       }
+        
+      
 
       for (const p of tabuleiro){
         if (p.distancia(novaPos) == 0) pos = p
@@ -170,7 +170,7 @@ const Tabuleiro = props => {
       }
     }
     
-    return (<div><Stage width={props.size*props.tam*1.74} height={((props.size*props.tam*2))} >
+    return (<Stage width={props.size*props.tam*1.74} height={((props.size*props.tam*2))} >
       <Layer>
       {tabuleiro.map((tab) => (
           <RegularPolygon
@@ -186,10 +186,7 @@ const Tabuleiro = props => {
         ))}
         <Token posicao={posicaoToken} key="Token" />
       </Layer>
-    </Stage>
-    <button onClick={() => {moveToken({direcao:"BC",distancia:2,polaridade:"+"})}}>
-        Testa movimento
-    </button></div>);
+    </Stage>);
 
     //return <canvas ref={canvasRef} width={props.size*props.tam} height={((props.size*Math.sqrt(3))/2)*props.tam} style={{border:"1px solid #000000"}, {background: "#FFFFFF"}}/>
   }

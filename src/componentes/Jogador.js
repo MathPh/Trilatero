@@ -14,6 +14,7 @@ export default function Jogador(props){
     const [jogador_1,setJogador1] = useState({"id":1, "letra":null})
     const [jogador_2,setJogador2] = useState({"id":2, "letra":null})
     const [voto, setVoto] = useState(jogadoresIniciais)
+    const [votoSim, setVotoSim] = useState(0)
     const [eu, setEu] = useState(0)
 
     useEffect(() => {
@@ -26,16 +27,15 @@ export default function Jogador(props){
 
     useEffect(() => {
         console.log(voto)
+        setVotoSim((voto["A"].veredito == "Sim" ? 1:0)
+        +(voto["B"].veredito == "Sim" ? 1:0)
+        +(voto["C"].veredito == "Sim" ? 1:0)
+        +(voto["mesa"].veredito == "Sim" ? 1:0))
     }, [voto])
 
     useEffect(() => {
         setVoto(jogadoresIniciais)
     }, [props.renovarVotos])
-
-    useEffect(() => {
-        console.log("valor dealer: ",props.renovarVotos % 3);
-        console.log("eu: ", eu % 3);
-    }, [eu, props.renovarVotos])
 
     //https://stackoverflow.com/a/2450976/9295348
 
@@ -69,6 +69,7 @@ export default function Jogador(props){
           setVoto(prev => ({...prev, [id]:{id: id, veredito: veredito}}))
           setVoto(prev => ({...prev, "mesa":
           {id: "mesa", "veredito": Math.round(Math.random())? "Sim": "Não"}}))
+          
       }
 
       function aparecerBotoes(jogadores){
@@ -149,12 +150,12 @@ export default function Jogador(props){
                 </p>
                 <div>
                     {
-                       Math.abs(props.resultado) == 0 ?
+                       props.resultado?.polaridade == "" ?
                        <div>
-                         <button onClick={() => {props.handleConfirmar()}}>
+                         <button onClick={() => {props.handleConfirmar(votoSim)}}>
                             Confirmar
                          </button>
-                         <button onClick={() => {props.handleMentir()}}>
+                         <button onClick={() => {props.handleMentir(votoSim)}}>
                             Mentir
                         </button>
                        </div> 
@@ -164,8 +165,8 @@ export default function Jogador(props){
             </div>
                     : 
                     <div> 
-                        {Math.abs(props.resultado) == 1 ?
-                        <button onClick={() => {props.handleTrucarChapeu()}}>
+                        {props.resultado?.polaridade != "" ?
+                        <button onClick={() => {props.handleTrucarChapeu(votoSim)}}>
                             Truco o Chapeu
                         </button> : null
                         }
